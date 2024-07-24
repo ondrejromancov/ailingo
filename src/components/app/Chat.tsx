@@ -11,27 +11,31 @@ import {
   CardContent,
 } from "../ui/card";
 import { Input } from "../ui/input";
-import { Language } from "@/lib/types";
+import { Language, Message } from "@/lib/types";
+import { continueChat } from "@/app/actions";
+import { readStreamableValue } from "ai/rsc";
 
-interface Message {
-  type: "user" | "assistant";
-  content: string;
-}
-
-export const Chat = (params: {selectedLanguage: Language}) => {
+export const Chat = (params: { selectedLanguage: Language }) => {
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
   const [chatInput, setChatInput] = useState("");
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (chatInput.trim() !== "") {
-      setChatMessages([...chatMessages, { type: "user", content: chatInput }]);
-      // In a real app, you would call your backend API here to get the AI response
-      setTimeout(() => {
-        setChatMessages((prev) => [
-          ...prev,
-          { type: "assistant", content: `AI response to: ${chatInput}` },
+      const { messages, newMessage } = await continueChat([
+        ...chatMessages,
+        { role: "user", content: chatInput },
+      ]);
+      setChatMessages([...chatMessages, { role: "user", content: chatInput }]);
+
+      let textContent = "";
+      for await (const delta of readStreamableValue(newMessage)) {
+        textContent = `${textContent}${delta}`;
+
+        setChatMessages([
+          ...messages,
+          { role: "assistant", content: textContent },
         ]);
-      }, 1000);
+      }
       setChatInput("");
     }
   };
@@ -50,12 +54,12 @@ export const Chat = (params: {selectedLanguage: Language}) => {
             <div
               key={index}
               className={`flex ${
-                message.type === "user" ? "justify-end" : "justify-start"
+                message.role === "user" ? "justify-end" : "justify-start"
               } mb-2`}
             >
               <div
                 className={`rounded-lg p-2 max-w-[70%] ${
-                  message.type === "user"
+                  message.role === "user"
                     ? "bg-blue-500 text-white"
                     : "bg-gray-200"
                 }`}
