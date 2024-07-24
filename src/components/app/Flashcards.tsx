@@ -17,9 +17,7 @@ export const Flashcards = (params: { selectedLanguage: Language }) => {
   const [flashcardsResult, setFlashcardsResult] = useState("");
 
   const handleGenerateFlashcards = async () => {
-    setFlashcardsResult(
-      `Generated flashcards for ${flashcardsTopic} in ${params.selectedLanguage}`
-    );
+    setFlashcardsResult(`Generated flashcards...`);
   };
 
   return (

@@ -48,8 +48,8 @@ const App = () => {
 
         <Tabs defaultValue="chat" className="w-full">
           <TabsList>
-            <TabsTrigger value="chat">Chat</TabsTrigger>
             <TabsTrigger value="flashcards">Flashcards</TabsTrigger>
+            <TabsTrigger value="chat">Chat</TabsTrigger>
             <TabsTrigger value="sentences">Sentences</TabsTrigger>
             {/* <TabsTrigger value="quiz">Quiz</TabsTrigger> */}
           </TabsList>
