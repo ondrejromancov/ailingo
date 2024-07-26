@@ -11,7 +11,9 @@ The app is missing some it's core AI features and as those are up to you to impl
 
 ## Getting Started
 
-First, run the development server:
+First, get your OpenAI API key. Then create a copy of the `.env.template` file and rename it to `.env` . Finally update the `OPENAI_API_KEY` parameter in the new file which you've created.
+
+Then run the development server with:
 
 ```bash
 npm run dev
