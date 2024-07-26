@@ -11,13 +11,15 @@ import {
 } from "../ui/card";
 import { Input } from "../ui/input";
 import { Language } from "@/lib/types";
+import { generateFlashcards } from "@/app/actions";
 
 export const Flashcards = (params: { selectedLanguage: Language }) => {
   const [flashcardsTopic, setFlashcardsTopic] = useState<string>("");
   const [flashcardsResult, setFlashcardsResult] = useState("");
 
   const handleGenerateFlashcards = async () => {
-    setFlashcardsResult(`Generated flashcards...`);
+    const text = await generateFlashcards(flashcardsTopic, params.selectedLanguage);
+    setFlashcardsResult(text);
   };
 
   return (
